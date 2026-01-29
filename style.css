@@ -137,3 +137,39 @@ body, html {
     .logo-container { width: 100px; top: 15px; left: 15px; }
     .text-container-bottom { bottom: 12%; } 
 }
+
+/* =========================================
+   FLECHA ANIMADA (CORREGIDA)
+   ========================================= */
+.cta-arrow {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px; /* Separación del texto */
+    animation: bounce 2s infinite; /* Animación de rebote */
+}
+
+.cta-arrow svg {
+    width: 50px; /* Tamaño visible */
+    height: 50px;
+    fill: #F08159; /* Color Naranja Fuerte desde el inicio */
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); /* Sombra para que destaque sobre el video */
+    transition: transform 0.3s ease;
+}
+
+/* Al pasar el mouse por todo el bloque, la flecha crece un poco */
+.text-container-bottom:hover .cta-arrow svg {
+    transform: scale(1.2);
+}
+
+/* Animación de Rebote (Sube y baja) */
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px); /* Se mueve hacia ARRIBA */
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}

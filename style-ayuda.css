@@ -152,7 +152,7 @@ section h2 { color: var(--azul-medio); font-size: 2rem; margin-bottom: 10px; }
    5. HERRAMIENTAS (TIPS)
    ========================================= */
 .tools-section { background: var(--azul-palido); padding: 4rem 20px; margin-bottom: 0; border-radius: 20px; }
-.tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+.tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 20px;}
 
 .tool-card {
     background: white; padding: 25px; border-radius: 15px; text-align: left;
@@ -193,3 +193,89 @@ footer { background: #08121d; color: #777; text-align: center; padding: 3rem 0; 
     
     .dropdown-content { display: none; } /* Simplificado para esta página */
 }
+
+/* =========================================
+   WIDGET DE RESPIRACIÓN INTERACTIVO
+   ========================================= */
+.breathing-widget-card {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Contenedor Visual */
+.breath-visual-container {
+    position: relative;
+    width: 260px;
+    height: 260px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+/* El Círculo que respira */
+.breath-circle {
+    position: absolute;
+    width: 100px;  /* Tamaño inicial (Pequeño) */
+    height: 100px; /* Tamaño inicial (Pequeño) */
+    background-color: var(--azul-palido);
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(32, 93, 145, 0.2);
+    /* Esta transición es la clave de la suavidad */
+    transition: all 0.1s linear; 
+    z-index: 1;
+}
+
+/* Texto central */
+.breath-label {
+    position: relative;
+    z-index: 2;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--azul-oscuro);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.breath-timer {
+    position: absolute;
+    bottom: 60px;
+    z-index: 2;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.1rem;
+    color: var(--azul-medio);
+    font-weight: 600;
+}
+
+/* Botón de Control */
+.btn-breathing {
+    background-color: var(--azul-medio);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 50px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(32, 93, 145, 0.3);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* Evita que el texto se seleccione al mantener presionado en móviles */
+    user-select: none; 
+    -webkit-user-select: none; 
+}
+
+/* Estado cuando se está presionando el botón */
+.btn-breathing:active, .btn-breathing.is-pressing {
+    background-color: var(--naranja-fuerte);
+    transform: scale(0.98);
+    box-shadow: 0 2px 5px rgba(240, 129, 89, 0.4);
+}
+
+.btn-breathing i { font-size: 1.2rem; }

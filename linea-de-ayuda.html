@@ -123,16 +123,20 @@
                     </ul>
                 </div>
 
-                <div class="tool-card">
-                    <div class="tool-icon">🌬️</div>
+                <div class="tool-card breathing-widget-card">
+                    <div class="tool-icon" style="font-size: 3rem;">🌬️</div>
                     <h3>Respiración Cuadrada</h3>
-                    <p>Ideal para el pánico. Imagina un cuadrado:</p>
-                    <ul class="steps-list">
-                        <li>Inhala en <strong>4 segundos</strong>.</li>
-                        <li>Sostén el aire <strong>4 segundos</strong>.</li>
-                        <li>Exhala en <strong>4 segundos</strong>.</li>
-                        <li>Sostén sin aire <strong>4 segundos</strong>.</li>
-                    </ul>
+                    <p style="margin-bottom: 25px;">Mantén presionado el botón siguiendo las instrucciones para guiar tu respiración.</p>
+
+                    <div class="breath-visual-container">
+                        <div class="breath-circle" id="breathCircle"></div>
+                        <div class="breath-label" id="breathLabel">Listo</div>
+                        <div class="breath-timer" id="breathTimer">4s</div>
+                    </div>
+
+                    <button id="breathBtn" class="btn-breathing">
+                        <i class="fas fa-fingerprint"></i> Mantén presionado para Inhalar
+                    </button>
                 </div>
 
                 <div class="tool-card">
