@@ -90,7 +90,7 @@ function preloadImages() {
     }
     // Precargar también la imagen por defecto por si acaso
     const defaultImg = new Image();
-    defaultImg.src = 'image_0.png';
+    defaultImg.src = 'nudo.png';
 }
 
 function startGame(pathId) {
