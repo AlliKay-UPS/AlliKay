@@ -22,7 +22,7 @@ const gameData = {
         title: "El Desafío Social",
         steps: [
             {
-                img: 'nudo.png', 
+                img: 'Nudo.png', 
                 title: "La Llegada",
                 text: "Llegas a la fiesta. La música está alta. Sientes un nudo en el estómago al cruzar la puerta.",
                 options: [{ text: "Ir a una esquina y mirar el móvil.", score: 1 }, { text: "Buscar al anfitrión para saludar.", score: 0 }]
