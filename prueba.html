@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapas Mentales</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Montserrat:wght@500;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- TU PALETA DE COLORES --- */
+        :root {
+            --orange-main: #F5A162;
+            --orange-soft: #FBCDAB;
+            --cream-bg: #FEF6F2;
+            --blue-grey: #D5E4E6;
+            --blue-med: #205D91;
+            --blue-dark: #0D1F30;
+
+            /* Fuentes */
+            --font-title: 'Fredoka', sans-serif;
+            --font-subtitle: 'Montserrat', sans-serif;
+            --font-body: 'Open Sans', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: var(--cream-bg);
+            font-family: var(--font-body);
+            color: var(--blue-dark);
+        }
+
+        /* --- TÍTULO PRINCIPAL --- */
+        .header-section {
+            text-align: center;
+            margin-bottom: 20px;
+            margin-top: 20px;
+        }
+
+        .main-title {
+            font-family: var(--font-title);
+            font-size: 3.5rem;
+            margin: 0;
+            color: var(--orange-main);
+            text-shadow: 2px 2px 0px var(--blue-dark);
+            letter-spacing: 1px;
+        }
+        
+        .main-subtitle {
+             font-family: var(--font-subtitle);
+             font-size: 1.2rem;
+             color: var(--blue-med);
+             font-weight: 600;
+             margin-top: 5px;
+        }
+
+        /* --- CONTENEDOR DEL JUEGO --- */
+        .game-container {
+            max-width: 950px;
+            width: 90%;
+            background: #ffffff; 
+            border: 4px solid var(--blue-grey);
+            padding: 15px 40px; 
+            border-radius: 30px;
+            box-shadow: 10px 10px 0px var(--blue-med);
+            min-height: 450px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative; /* Importante para la flecha absoluta */
+        }
+
+        /* --- BOTÓN VOLVER (NUEVO) --- */
+        .back-btn {
+            position: absolute;
+            top: 25px;
+            left: 30px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-subtitle);
+            font-weight: 700;
+            color: var(--blue-med);
+            font-size: 1rem;
+            padding: 5px 10px;
+            border-radius: 8px;
+            transition: all 0.2s;
+            z-index: 10;
+        }
+
+        .back-btn:hover {
+            background-color: var(--cream-bg);
+            color: var(--orange-main);
+            transform: translateX(-3px); /* Pequeño movimiento a la izquierda */
+        }
+
+        .back-icon {
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+
+        /* --- PANTALLA DE SELECCIÓN --- */
+        #selection-stage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .intro-text {
+            font-family: var(--font-body); 
+            font-size: 1.1rem; 
+            max-width: 100%; 
+            text-align: center;
+            color: var(--blue-dark);
+            margin-bottom: 30px;
+        }
+
+        .paths-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .path-card {
+            background: var(--cream-bg);
+            border: 2px solid var(--orange-soft);
+            border-radius: 20px;
+            padding: 15px;
+            width: 200px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .path-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--orange-main);
+            background: white;
+            box-shadow: 0 10px 20px rgba(32, 93, 145, 0.15);
+        }
+        
+        .path-icon-container {
+            width: 160px;
+            height: 160px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--blue-grey);
+            border-radius: 50%;
+            margin-bottom: 15px;
+            transition: background 0.3s;
+        }
+        
+        .path-card:hover .path-icon-container {
+             background: var(--orange-soft);
+        }
+
+        .path-icon {
+            width: 90%; 
+            height: auto;
+            object-fit: contain;
+        }
+
+        .path-card h3 {
+            font-family: var(--font-title);
+            font-size: 1.3rem;
+            color: var(--blue-med);
+            margin: 5px 0 0 0;
+        }
+
+
+        /* --- PANTALLA DE NARRATIVA --- */
+        #narrative-stage {
+            display: none;
+            width: 100%;
+            flex-direction: row;
+            gap: 30px;
+            align-items: center;
+            padding-top: 20px; /* Espacio para que la flecha no choque */
+        }
+
+        .image-column {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-frame {
+            width: 380px;
+            height: 380px;
+            background-color: var(--orange-soft);
+            border: 4px solid var(--blue-dark);
+            border-radius: 30px; 
+            overflow: hidden;
+            box-shadow: 8px 8px 0px var(--orange-main);
+            position: relative;
+        }
+
+        .image-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .content-column {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .step-indicator {
+            font-family: var(--font-subtitle);
+            background-color: var(--blue-grey);
+            color: var(--blue-dark);
+            padding: 5px 12px;
+            border-radius: 15px;
+            display: inline-block;
+            width: fit-content;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .scenario-title {
+            font-family: var(--font-title);
+            font-size: 2.5rem;
+            margin: 0 0 15px 0;
+            color: var(--blue-med);
+            line-height: 1.1;
+        }
+
+        .scenario-text {
+            font-family: var(--font-body);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            color: var(--blue-dark);
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .game-btn {
+            padding: 16px 20px;
+            font-size: 1rem;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: var(--font-subtitle);
+            font-weight: 600;
+            transition: all 0.2s;
+            text-align: left;
+            position: relative;
+        }
+
+        .btn-primary { 
+            background-color: var(--orange-main); 
+            color: white; 
+            box-shadow: 0 4px 10px rgba(245, 161, 98, 0.4);
+        }
+        .btn-primary:hover { 
+            background-color: #e58e4d;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary { 
+            background-color: var(--blue-dark); 
+            color: white; 
+        }
+        .btn-secondary:hover { 
+            background-color: #081522; 
+            transform: translateY(-2px); 
+        }
+
+        /* PANTALLA FINAL */
+        #results-stage {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 100%;
+        }
+        
+        #results-stage h1 { 
+            font-family: var(--font-title); 
+            font-size: 3rem; 
+            color: var(--blue-med);
+        }
+
+        .feedback-box {
+            background: var(--cream-bg);
+            border: 2px solid var(--blue-grey);
+            padding: 30px;
+            border-radius: 20px;
+            margin: 20px 0;
+            max-width: 700px;
+        }
+        
+        #feedback-title {
+            font-family: var(--font-title);
+            font-size: 1.8rem;
+            color: var(--orange-main);
+        }
+
+        .helpline-alert {
+            background-color: white;
+            border-left: 6px solid var(--orange-main);
+            padding: 20px;
+            margin-top: 20px;
+            text-align: left;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        /* FOOTER */
+        .disclaimer-footer {
+            max-width: 1000px;
+            margin-top: 30px;
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            color: var(--blue-med);
+            text-align: center;
+            opacity: 0.7;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .game-container { flex-direction: column; padding: 20px; width: 95%; }
+            #narrative-stage { flex-direction: column; text-align: center; padding-top: 50px; } /* Más espacio arriba en móvil para la flecha */
+            .image-frame { width: 280px; height: 280px; margin: 0 auto 20px auto; }
+            .content-column { align-items: center; }
+            .game-btn { text-align: center; }
+            .main-title { font-size: 2.5rem; }
+            .options-container { width: 100%; }
+            .back-btn { top: 15px; left: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-section">
+        <h1 class="main-title">Mapas Mentales</h1>
+        <h2 class="main-subtitle">Navegando las rutas de la ansiedad</h2>
+    </div>
+
+    <div class="game-container">
+        
+        <div id="selection-stage">
+            <p class="intro-text">
+                Explora cómo diferentes situaciones cotidianas pueden desencadenar ansiedad. Tu objetivo es navegar estas situaciones tomando decisiones.
+            </p>
+            
+            <div class="paths-grid">
+                <div class="path-card" onclick="startGame('social')">
+                    <div class="path-icon-container">
+                        <img src="Social.png" alt="Social" class="path-icon">
+                    </div>
+                    <h3>Encajar Socialmente</h3>
+                </div>
+                <div class="path-card" onclick="startGame('exam')">
+                    <div class="path-icon-container">
+                        <img src="Examen.png" alt="Examen" class="path-icon">
+                    </div>
+                    <h3>Rendir Examen</h3>
+                </div>
+                <div class="path-card" onclick="startGame('future')">
+                    <div class="path-icon-container">
+                        <img src="Futuro.png" alt="Futuro" class="path-icon">
+                    </div>
+                    <h3>Miedo al Futuro</h3>
+                </div>
+            </div>
+        </div>
+
+        <div id="narrative-stage">
+            
+            <button class="back-btn" onclick="goBack()">
+                <span class="back-icon">&#8592;</span> Volver
+            </button>
+
+            <div class="image-column">
+                <div class="image-frame">
+                    <img id="game-image" src="image_0.png" alt="Escenario">
+                </div>
+            </div>
+            
+            <div class="content-column">
+                <div class="step-indicator" id="step-counter">PASO 1 DE 5</div>
+                <h2 class="scenario-title" id="scenario-title">Título</h2>
+                <p class="scenario-text" id="scenario-text">Texto...</p>
+                
+                <div class="options-container" id="options-box">
+                    </div>
+            </div>
+        </div>
+
+        <div id="results-stage">
+            <h1>Fin del Camino</h1>
+            <div class="feedback-box">
+                <h2 id="feedback-title">...</h2>
+                <p id="feedback-text">...</p>
+                
+                <div id="helpline-box" class="helpline-alert" style="display: none;">
+                    <strong>Nota importante:</strong> Hemos detectado patrones que sugieren malestar. Si te identificas a menudo con estas respuestas, no lo enfrentes solo.
+                    <br><br>
+                    Hablar con un adulto de confianza o un profesional es un paso valiente.
+                </div>
+            </div>
+            <button class="game-btn btn-primary" onclick="location.reload()" style="width: auto; padding: 15px 40px; margin-top: 10px;">Volver a Empezar</button>
+        </div>
+
+    </div>
+
+    <footer class="disclaimer-footer">
+        <p>Aunque los escenarios descritos en este juego son realistas y buscan representar situaciones comunes en la adolescencia, los nombres, personajes e incidentes específicos retratados son ficticios. No se pretende ni debe inferirse ninguna identificación con personas, lugares, edificios ni productos reales.</p>
+        <p><strong>Aviso:</strong> Esta herramienta es educativa. Los resultados <strong>NO constituyen un diagnóstico médico ni psicológico</strong>. Si experimentas síntomas de ansiedad, busca el consejo de un profesional calificado.</p>
+    </footer>
+
+    <script>
+        // === DATOS DEL JUEGO ===
+        const gameData = {
+            social: {
+                title: "El Desafío Social",
+                steps: [
+                    {
+                        img: 'nudo.png', 
+                        title: "La Llegada",
+                        text: "Llegas a la fiesta. La música está alta. Sientes un nudo en el estómago al cruzar la puerta.",
+                        options: [{ text: "Ir a una esquina y mirar el móvil.", score: 1 }, { text: "Buscar al anfitrión para saludar.", score: 0 }]
+                    },
+                    { img: 'cine.png', title: "El Círculo", text: "Te preguntan por una película que no viste.", options: [{text:"Mentir y decir que sí.",score:1},{text:"Admitir que no la viste.",score:0}]},
+                    { img: 'chiste.png', title: "Silencio", text: "Haces un chiste y nadie se ríe.", options: [{text:"Pensar que te odian.",score:1},{text:"Reírte de ti mismo.",score:0}]},
+                    { img: 'mirar.png', title: "Miradas", text: "Dos personas susurran cerca.", options: [{text:"Creer que hablan mal de ti.",score:1},{text:"Ignorarlo.",score:0}]},
+                    { img: 'irse.png', title: "Salida", text: "Hora de irse.", options: [{text:"Huir sin despedirse.",score:1},{text:"Despedirse de quien puedas.",score:0}]}
+                ]
+            },
+            exam: {
+                title: "La Presión del Examen",
+                steps: [
+                     {
+                        img: 'noche.png',
+                        title: "La Noche Anterior",
+                        text: "Es la noche antes del final. Llevas horas estudiando sin parar.",
+                        options: [{ text: "Quedarte hasta las 4 AM.", score: 1 }, { text: "Dormir para descansar.", score: 0 }]
+                    },
+                    { img: 'formulas.png', title: "Pasillo", text: "Todos repasan fórmulas.", options: [{text:"Entrar en pánico.",score:1},{text:"Escuchar música.",score:0}]},
+                    { img: 'blanco.png', title: "Bloqueo", text: "Mente en blanco.", options: [{text:"Paralizarte.",score:1},{text:"Respirar y saltar pregunta.",score:0}]},
+                    { img: 'tiempo.png', title: "Tiempo", text: "Queda poco tiempo.", options: [{text:"Escribir a lo loco.",score:1},{text:"Priorizar lo importante.",score:0}]},
+                    { img: 'falla.png', title: "Post-Examen", text: "Te equivocaste en una.", options: [{text:"Obsesionarte con el error.",score:1},{text:"Aceptarlo y seguir.",score:0}]}
+                ]
+            },
+            future: {
+                title: "Incertidumbre Futura",
+                steps: [
+                     {
+                        img: 'indeciso.png',
+                        title: "La Charla",
+                        text: "Todos saben qué estudiar menos tú.",
+                        options: [{ text: "Sentirte inferior.", score: 1 }, { text: "Darte tiempo.", score: 0 }]
+                    },
+                    { img: 'quehara.png', title: "Preguntas", text: "¿Qué harás en 5 años?", options: [{text:"Angustiarte.",score:1},{text:"Enfocarte en el hoy.",score:0}]},
+                    { img: 'redes.png', title: "Comparación", text: "Ves redes sociales de amigos exitosos.", options: [{text:"Sentirte fracasado.",score:1},{text:"Alegrarte por ellos.",score:0}]},
+                    { img: 'elegir.png', title: "Decisión", text: "Debes elegir una carrera.", options: [{text:"Elegir lo que eligen otros.",score:1},{text:"Elegir lo que te gusta.",score:0}]},
+                    { img: 'miedo.png', title: "Fracaso", text: "Miedo a equivocarte de carrera.", options: [{text:"No elegir nada.",score:1},{text:"Saber que puedes cambiar.",score:0}]}
+                ]
+            }
+        };
+
+        let currentPathData = null;
+        let currentStepIndex = 0;
+        let totalAnxietyScore = 0;
+
+        const selectionStage = document.getElementById('selection-stage');
+        const narrativeStage = document.getElementById('narrative-stage');
+        const resultsStage = document.getElementById('results-stage');
+        const gameImage = document.getElementById('game-image');
+        const stepCounter = document.getElementById('step-counter');
+        const scenarioTitle = document.getElementById('scenario-title');
+        const scenarioText = document.getElementById('scenario-text');
+        const optionsBox = document.getElementById('options-box');
+
+        function startGame(pathId) {
+            currentPathData = gameData[pathId].steps;
+            currentStepIndex = 0;
+            totalAnxietyScore = 0;
+            selectionStage.style.display = 'none';
+            narrativeStage.style.display = 'flex';
+            renderStep();
+        }
+
+        // --- NUEVA FUNCIÓN: VOLVER ATRÁS ---
+        function goBack() {
+            // Ocultar narrativa, mostrar selección
+            narrativeStage.style.display = 'none';
+            resultsStage.style.display = 'none';
+            selectionStage.style.display = 'flex';
+            // Resetear valores por seguridad
+            currentStepIndex = 0;
+            totalAnxietyScore = 0;
+        }
+
+        function renderStep() {
+            const stepData = currentPathData[currentStepIndex];
+            stepCounter.innerText = `PASO ${currentStepIndex + 1} DE ${currentPathData.length}`;
+            scenarioTitle.innerText = stepData.title;
+            scenarioText.innerText = stepData.text;
+
+            gameImage.style.opacity = 0;
+            setTimeout(() => {
+                gameImage.src = stepData.img;
+                gameImage.style.opacity = 1;
+            }, 200);
+
+            optionsBox.innerHTML = '';
+            stepData.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = index === 0 ? 'game-btn btn-primary' : 'game-btn btn-secondary';
+                btn.innerText = option.text;
+                btn.onclick = () => handleChoice(option.score);
+                optionsBox.appendChild(btn);
+            });
+        }
+
+        function handleChoice(score) {
+            totalAnxietyScore += score;
+            currentStepIndex++;
+            if (currentStepIndex < currentPathData.length) {
+                renderStep();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            narrativeStage.style.display = 'none';
+            resultsStage.style.display = 'flex';
+            const feedbackTitle = document.getElementById('feedback-title');
+            const feedbackText = document.getElementById('feedback-text');
+            const helplineBox = document.getElementById('helpline-box');
+
+            if (totalAnxietyScore >= 3) {
+                feedbackTitle.innerText = "La carga se siente pesada";
+                feedbackText.innerText = "Tus elecciones reflejan una tendencia a la evitación y autoexigencia.";
+                helplineBox.style.display = 'block';
+            } else if (totalAnxietyScore >= 1) {
+                feedbackTitle.innerText = "Navegando las aguas";
+                feedbackText.innerText = "A veces gestionas bien el estrés, otras veces la ansiedad gana un poco. Es normal.";
+                helplineBox.style.display = 'none';
+            } else {
+                feedbackTitle.innerText = "Perspectiva y Calma";
+                feedbackText.innerText = "¡Excelente manejo! Tienes herramientas para racionalizar tus miedos.";
+                helplineBox.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
