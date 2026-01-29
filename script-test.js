@@ -22,7 +22,7 @@ const gameData = {
         title: "El Desafío Social",
         steps: [
             {
-                img: 'nudo.png', 
+                img: 'fiesta.png', 
                 title: "La Llegada",
                 text: "Llegas a la fiesta. La música está alta. Sientes un nudo en el estómago al cruzar la puerta.",
                 options: [{ text: "Ir a una esquina y mirar el móvil.", score: 1 }, { text: "Buscar al anfitrión para saludar.", score: 0 }]
@@ -90,7 +90,7 @@ function preloadImages() {
     }
     // Precargar también la imagen por defecto por si acaso
     const defaultImg = new Image();
-    defaultImg.src = 'nudo.png';
+    defaultImg.src = 'image_0.png';
 }
 
 function startGame(pathId) {
